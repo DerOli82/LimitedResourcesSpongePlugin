@@ -1,0 +1,20 @@
+plugins {
+    id "java"
+    id "org.spongepowered.plugin" version "0.8.1"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+}
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:6.0.0'
+}
+
+group = "de.alaoli.games.minecraft.plugins" 
+version = "0.1.0"
+description = "Block limitation plugin for sponge"

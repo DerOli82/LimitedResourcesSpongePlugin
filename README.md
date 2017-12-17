@@ -1,1 +1,1 @@
-# LimitedResourcesSpongePlugin
+# Limited Resources for Sponge
