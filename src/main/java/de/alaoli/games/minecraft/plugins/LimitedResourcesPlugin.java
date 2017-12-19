@@ -1,65 +1,33 @@
+/* *************************************************************************************************************
+ * Copyright (c) 2017 DerOli82 <https://github.com/DerOli82>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see:
+ *
+ * https://www.gnu.org/licenses/lgpl-3.0.html
+ ************************************************************************************************************ */
 package de.alaoli.games.minecraft.plugins;
 
 import com.google.inject.Inject;
-import de.alaoli.games.minecraft.plugins.event.handler.BlockEventHandler;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.util.generator.dummy.DummyObjectProvider;
-
-import java.io.IOException;
 
 /**
  * @author DerOli82 <https://github.com/DerOli82>
  */
-@Plugin(
-    id = "limitedresources",
-    name = "Limited Resources",
-    description = "Block limitation and management plugin for Sponge.",
-    version = "0.1.0" )
-public class LimitedResources
+@Plugin( id = PluginInfo.ID, name = PluginInfo.NAME, description = PluginInfo.DESC, version = PluginInfo.VERSION )
+public class LimitedResourcesPlugin
 {
     @Inject
     private Logger logger;
-
-    @Inject
-    @DefaultConfig( sharedRoot = false )
-    private ConfigurationLoader<CommentedConfigurationNode> loader;
-
-    @Listener
-    public void onPreInitializationEvent( GamePreInitializationEvent event )
-    {
-        try
-        {
-            ConfigurationNode node = this.loader.load();
-
-            this.loader.save( node );
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-
-
-
-    }
-
-    @Listener
-    public void onInitializationEvent( GameInitializationEvent event )
-    {
-
-    }
 }
