@@ -19,10 +19,12 @@
 
 package de.alaoli.games.minecraft.plugins.data;
 
+import java.util.Optional;
+
 /**
  * @author DerOli82 <https://github.com/DerOli82>
  */
-public class Block
+public class ManagedBlock implements ForbiddenBlock, LimitedBlock
 {
     /* **************************************************************************************************************
      * Attribute
@@ -30,13 +32,27 @@ public class Block
 
     private final String identifier;
 
+    private int limit;
+    private String reason;
+
     /* **************************************************************************************************************
      * Method
      ************************************************************************************************************** */
 
-    public Block( String identifier )
+    public ManagedBlock( String identifier )
     {
         this.identifier = identifier;
+        this.limit = -1;
+    }
+
+    public void setLimit( int limit )
+    {
+        this.limit = limit;
+    }
+
+    public void setReason( String reason )
+    {
+        this.reason = reason;
     }
 
     @Override
@@ -48,11 +64,48 @@ public class Block
     @Override
     public boolean equals( Object obj )
     {
-        return obj instanceof Block && ((Block)obj).identifier.equals( this.identifier );
+        return obj instanceof ManagedBlock && ((ManagedBlock)obj).identifier.equals( this.identifier );
     }
 
+    /* **************************************************************************************************************
+     * Method - Implement Block
+     ************************************************************************************************************** */
+
+    @Override
     public String getIdentifier()
     {
         return this.identifier;
+    }
+
+    /* **************************************************************************************************************
+     * Method - Implement ForbiddenBlock
+     ************************************************************************************************************** */
+
+    @Override
+    public boolean isForbidden()
+    {
+        return this.limit == 0;
+    }
+
+    @Override
+    public Optional<String> getReason()
+    {
+        return Optional.ofNullable( this.reason );
+    }
+
+    /* **************************************************************************************************************
+     * Method - Implement LimitedBlock
+     ************************************************************************************************************** */
+
+    @Override
+    public boolean isLimited()
+    {
+        return this.limit > 0;
+    }
+
+    @Override
+    public int getLimit()
+    {
+        return this.limit;
     }
 }
