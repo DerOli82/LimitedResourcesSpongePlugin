@@ -19,8 +19,18 @@
 package de.alaoli.games.minecraft.plugins;
 
 import com.google.inject.Inject;
+import de.alaoli.games.minecraft.plugins.manager.BlockManager;
+import de.alaoli.games.minecraft.plugins.manager.FileHandling;
 import org.slf4j.Logger;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * @author DerOli82 <https://github.com/DerOli82>
@@ -28,6 +38,62 @@ import org.spongepowered.api.plugin.Plugin;
 @Plugin( id = PluginInfo.ID, name = PluginInfo.NAME, description = PluginInfo.DESC, version = PluginInfo.VERSION )
 public class LimitedResourcesPlugin
 {
+    /* **************************************************************************************************************
+     * Attribute
+     ************************************************************************************************************** */
+
+    private static LimitedResourcesPlugin instance;
+
     @Inject
     private Logger logger;
+
+    @Inject
+    @ConfigDir( sharedRoot = false )
+    private Path configPath;
+
+    /* **************************************************************************************************************
+     * Method
+     ************************************************************************************************************** */
+
+    public static Optional<Logger> getLogger()
+    {
+        if( instance == null ) { return Optional.empty(); }
+
+        return Optional.ofNullable( instance.logger );
+    }
+
+    /* **************************************************************************************************************
+     * Method - Sponge Events
+     ************************************************************************************************************** */
+
+    @Listener
+    public void onPreInitializationEvent( GamePreInitializationEvent event )
+    {
+        instance = this;
+
+        try
+        {
+            FileHandling bm = BlockManager.getInstance();
+            bm.init( this.configPath );
+            bm.load();
+        }
+        catch( IOException e )
+        {
+            this.logger.error( "Can't load blocks.conf because: " + e.getMessage() );
+        }
+    }
+
+    @Listener
+    public void onGameStoppedServerEvent( GameStoppedServerEvent event )
+    {
+        try
+        {
+            FileHandling bm = BlockManager.getInstance();
+            bm.save();
+        }
+        catch( IOException e )
+        {
+            this.logger.error( "Can't save blocks.conf because: " + e.getMessage() );
+        }
+    }
 }
